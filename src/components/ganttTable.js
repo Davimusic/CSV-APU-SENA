@@ -52,33 +52,43 @@ export function GanttTable() {
         // Crear el objeto ordenado
         const objetoOrdenado = {};
         
-        // Recorrer las filas del Excel
-        for (let i = 1; i < rows.length; i++) {
-            const fila = rows[i];
-            const idEmpresa = fila[0];
-            const nombreEmpresa = fila[1];
-            const material = fila[2];
-            const precio = fila[3];
-            const cantidad = fila[4];
-        
-            // Agregar ID Empresa y Nombre empresa al objeto
-            if (idEmpresa !== null) {
-                objetoOrdenado["ID Empresa"] = idEmpresa;
-            }
-            if (nombreEmpresa !== null) {
-                objetoOrdenado["Nombre empresa"] = nombreEmpresa;
-            }
-        
-            // Agregar materiales al objeto
-            if (!objetoOrdenado.materiales) {
-                objetoOrdenado.materiales = [];
-            }
-            objetoOrdenado.materiales.push({
-                material: material,
-                precio: precio,
-                "cantidad disponible": cantidad
-            });
-        }
+// Recorremos las filas del Excel
+for (let i = 1; i < rows.length; i++) {
+    const fila = rows[i];
+    const idEmpresa = fila[2]; // Cambio en el índice debido a la nueva estructura
+    const nombreEmpresa = fila[3]; // Cambio en el índice
+    const material = fila[4]; // Cambio en el índice
+    const precio = fila[5]; // Cambio en el índice
+    const cantidad = fila[6]; // Cambio en el índice
+    const ciudad = fila[0]; // Nuevo campo
+    const contacto = fila[1]; // Nuevo campo
+
+    // Agregamos ID Empresa y Nombre empresa al objeto
+    if (idEmpresa !== null) {
+        objetoOrdenado["ID Empresa"] = idEmpresa;
+    }
+    if (nombreEmpresa !== null) {
+        objetoOrdenado["Nombre empresa"] = nombreEmpresa;
+    }
+
+    // Agregamos materiales al objeto
+    if (!objetoOrdenado.materiales) {
+        objetoOrdenado.materiales = [];
+    }
+    objetoOrdenado.materiales.push({
+        material: material,
+        precio: precio,
+        "cantidad disponible": cantidad
+    });
+
+    // Agregamos Ciudad y contacto al objeto
+    if (ciudad !== null) {
+        objetoOrdenado["Ciudad"] = ciudad;
+    }
+    if (contacto !== null) {
+        objetoOrdenado["Contacto"] = contacto;
+    }
+}
 
         savePrueba(objetoOrdenado)
         console.log(objetoOrdenado);        
