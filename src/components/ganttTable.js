@@ -122,7 +122,6 @@ export function GanttTable() {
 
 
     const uploadFile = async () => {
-        alert('comentado')
         leerArchivoExcel(selectedFile)
         /* funcional, mas comentado
         setLoading(true);
