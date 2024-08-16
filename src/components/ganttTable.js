@@ -111,11 +111,12 @@ export function GanttTable() {
     
             const result = await response.json(); 
             //setErrorMessage('Cambios guardados exitosamente')
-            return console.log('fueeee');
+            return alert('cargado exitosamente')
             return result; // Devuelve el resultado
         } catch (error) {
             console.log(error);
             console.error('Error guardando el documento:', error);
+            return alert(error)
             return error; // Devuelve el error
         }
     }
