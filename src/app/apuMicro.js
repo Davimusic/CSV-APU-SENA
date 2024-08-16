@@ -83,7 +83,7 @@ export function ApuMicro(){
                 <div>
                     {isOnline ? (
                         <div>
-                            <Menu onActivate={handleMenuActivation} />
+                            {/*<Menu onActivate={handleMenuActivation} />*/}
                             <GanttTable />
                         </div>
                     ) : (

@@ -5,6 +5,8 @@ import llamarTodoAPUObjeto from "@/funciones/conectoresBackend/llamarTodoAPUObje
 import { CreateSelect } from "./selects";
 import decidirTipoDeArchivo from "@/funciones/decidirTipoDeArchivo";
 
+import readXlsxFile from 'read-excel-file';
+
 //redux
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -34,7 +36,95 @@ export function GanttTable() {
             });
     }, []);
 
+    function leerArchivoExcel(file) {
+        readXlsxFile(file).then((rows) => {
+            // `rows` es un array de filas
+            // Cada fila es un array de celdas
+            console.log('Contenido del archivo Excel:');
+            console.log(rows);
+            rodenarObjetoFinal(rows)
+        }).catch((error) => {
+            console.error('Error al leer el archivo:', error);
+        });
+    }
+
+    function rodenarObjetoFinal(rows){
+        // Crear el objeto ordenado
+        const objetoOrdenado = {};
+        
+        // Recorrer las filas del Excel
+        for (let i = 1; i < rows.length; i++) {
+            const fila = rows[i];
+            const idEmpresa = fila[0];
+            const nombreEmpresa = fila[1];
+            const material = fila[2];
+            const precio = fila[3];
+            const cantidad = fila[4];
+        
+            // Agregar ID Empresa y Nombre empresa al objeto
+            if (idEmpresa !== null) {
+                objetoOrdenado["ID Empresa"] = idEmpresa;
+            }
+            if (nombreEmpresa !== null) {
+                objetoOrdenado["Nombre empresa"] = nombreEmpresa;
+            }
+        
+            // Agregar materiales al objeto
+            if (!objetoOrdenado.materiales) {
+                objetoOrdenado.materiales = [];
+            }
+            objetoOrdenado.materiales.push({
+                material: material,
+                precio: precio,
+                "cantidad disponible": cantidad
+            });
+        }
+
+        savePrueba(objetoOrdenado)
+        console.log(objetoOrdenado);        
+    }
+
+    async function savePrueba(info) {
+        const data = { 
+            info: info, 
+            ID: info['ID Empresa']
+        }; 
+        
+        console.log(data);
+        
+    
+        try {
+            const response = await fetch('/api/saveAllData', {
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),                
+            });
+    
+            if (!response.ok) {
+                const errorData = await response.json();
+                const message = `An error has occurred: ${response.status}, ${errorData.error}`;
+                errorData.error === 'Nombre ya existente en la base de datos' ? setErrorMessage(`${errorData.error}, no puedes tener el mismo nombre como referencia, usa otro.`) : null
+                throw new Error(message);
+            }
+    
+            const result = await response.json(); 
+            //setErrorMessage('Cambios guardados exitosamente')
+            return console.log('fueeee');
+            return result; // Devuelve el resultado
+        } catch (error) {
+            console.log(error);
+            console.error('Error guardando el documento:', error);
+            return error; // Devuelve el error
+        }
+    }
+
+
     const uploadFile = async () => {
+        alert('comentado')
+        leerArchivoExcel(selectedFile)
+        /* funcional, mas comentado
         setLoading(true);
         const formData = new FormData();
         formData.append('file', selectedFile);
@@ -51,6 +141,7 @@ export function GanttTable() {
         setLoading(false);
         setUploadSuccess(true);
         setSelectedFile(null);
+        */
     };
 
     const handleFileChange = (e) => {
@@ -77,14 +168,7 @@ export function GanttTable() {
                             <MostrarInfo    informacion={'subir archivo'} 
                                             contenido={<button className="imagenSubirArchivos" style={{display: !selectedFile || loading ? 'none' : 'flex',  backgroundImage: 'url("https://res.cloudinary.com/dplncudbq/image/upload/v1706024045/save_pmx5wo.png")'}} onClick={uploadFile} ></button>}
                                             width={65} height={65} tyle={{paddingBottom: '20px'}}/> 
-                            {llavesProyectos.length !== 0 ? 
-                                <CreateSelect 
-                                    name={'llaves'} 
-                                    value={llaveProyectoEnUso} 
-                                    options={llavesProyectos} 
-                                    event={(event) => setLlaveProyectoEnUso(event.target.value)}
-                                /> 
-                            : null }                               
+                                                         
                         </div>                
                         <div style={{marginTop: '20px'}}>
                             {loading && <p>Cargando...</p>}

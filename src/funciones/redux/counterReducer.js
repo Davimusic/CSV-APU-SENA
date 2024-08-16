@@ -1,6 +1,6 @@
 const initialState = {
   objetosAPU : [], 
-  llavesProyectos: []
+  llavesProyectos: [],
 };
 
 const counterReducer = (state = initialState, action) => {
@@ -14,7 +14,8 @@ const counterReducer = (state = initialState, action) => {
       return {
         ...state,
         llavesProyectos: action.payload, 
-      };                                                         
+      };
+      case 'UPDATE_PREVISUALIZACION_EXCEL':                                                    
     default:
       return state;
   }
