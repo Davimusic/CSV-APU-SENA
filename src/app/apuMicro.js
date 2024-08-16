@@ -23,32 +23,12 @@ export function ApuMicro(){
     const [changeTask, setChangeTask] = useState({});
 
 
-
-    
-    useEffect(() => {
-        //alert(JSON.stringify(changeTask))
-        /*console.log(changeTask);
-        let newDicc = {}
-        for (let llave in tasks) {
-            if(llave === changeTask.nombreInicial){
-                newDicc[changeTask.nuevoNombre] = `${changeTask.inicio}-${changeTask.final}`;
-            } else {
-                newDicc[llave] = tasks[llave];
-            }
-        }
-        const newChangeTask = {'nombreInicial': changeTask.nuevoNombre, 'nuevoNombre': changeTask.nuevoNombre, 'inicio': changeTask.inicio, 'final': changeTask.final};
-        if (JSON.stringify(newChangeTask) !== JSON.stringify(changeTask)) {
-            setChangeTask(newChangeTask);
-        }
-        setTasks(newDicc);*/
-    }, [changeTask]);
-
     const handleMenuActivation = (isOpen) => {
         setIsMenuOpen(isOpen)
         console.log(isOpen ? 'El menú se ha abierto.' : 'El menú se ha cerrado.');
     };
 
-    const [isOnline, setIsOnline] = useState(navigator.onLine);
+    //const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   useEffect(() => {
     const onlineHandler = () => setIsOnline(true);
@@ -81,16 +61,10 @@ export function ApuMicro(){
             </head>
             <body className={`imagenFondo ${isMenuOpen === false ? 'marco' : 'sinMarco' }`} style={{height: '100%'}}>
                 <div>
-                    {isOnline ? (
-                        <div>
+                    <div>
                             {/*<Menu onActivate={handleMenuActivation} />*/}
                             <GanttTable />
-                        </div>
-                    ) : (
-                        <div style={{backgroundColor: '#0000009a', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                            <p>No hay conexión a Internet</p>
-                        </div>
-                    )}
+                    </div>
                 </div>
             </body>
         </html>
